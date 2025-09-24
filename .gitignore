@@ -1,0 +1,3 @@
+build
+*.o
+libft_malloc_*.so
