@@ -6,7 +6,7 @@
 /*   By: jikaewsi <strixz.self@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 03:18:25 by jikaewsi          #+#    #+#             */
-/*   Updated: 2025/09/26 09:01:04 by jikaewsi         ###   ########.fr       */
+/*   Updated: 2025/11/04 02:34:18 by jikaewsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <assert.h>
 # include <pthread.h>
 # include <stdlib.h>
+# include <unistd.h>
 # include <sys/mman.h>
 
 # define MIN_ALIGNMENT 16
@@ -24,8 +25,8 @@
 # define TINY_BLOCK_SIZE 256
 # define SMALL_BLOCK_SIZE 2048
 # define MIN_BLOCK_COUNT_IN_ZONE 128
-# define TINY_ALLOC_SIZE (aligned_header_size() - ALIGNED_HEADER_SIZE)
-# define SMALL_ALLOC_SIZE (aligned_header_size() - ALIGNED_HEADER_SIZE)
+# define TINY_ALLOC_SIZE (TINY_BLOCK_SIZE - aligned_header_size())
+# define SMALL_ALLOC_SIZE (SMALL_BLOCK_SIZE - aligned_header_size())
 
 # ifdef __APPLE__
 #  define PAGE_SIZE ((size_t) getpagesize())
@@ -60,6 +61,13 @@ typedef struct s_malloc_tracker {
 
 extern t_malloc_tracker g_tracker;
 
+// libft
+size_t          ft_strlen(const char *string);
+void            ft_putchar_fd(char character, int fd);
+void            ft_putnbr_fd(int number, int fd);
+void            ft_putstr_fd(const char *string, int fd);
+void            *ft_memcpy(void *destination, const void *source, size_t n);
+
 // Helpers
 
 void            add_block(t_block_metadata **lst_head, t_block_metadata *header);
@@ -73,6 +81,12 @@ size_t          get_aligned_large_block_size(size_t size);
 size_t          get_zone_headers_mem_usage(size_t block_size);
 
 void            *allocate(void *address, size_t size);
+void            *create_alloc_zone(t_zone_metadata **lst_head, size_t block_size);
+void            *allocate_block(t_zone_metadata *zone, size_t size);
+void            free_block(t_block_metadata *block);
+
+void            *intern_malloc(size_t size);
+void            intern_free(void *ptr);
 
 // Mandatory functions
 
@@ -80,6 +94,6 @@ void	        free(void *ptr);
 void	        *malloc(size_t size);
 void	        *realloc(void *ptr, size_t size);
 
-void	show_alloc_mem();
+void	        show_alloc_mem();
 
 #endif

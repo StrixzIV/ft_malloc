@@ -1,30 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memchr.c                                        :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jikaewsi <jikaewsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/27 14:05:27 by jikaewsi          #+#    #+#             */
-/*   Updated: 2024/08/30 08:53:43 by jikaewsi         ###   ########.fr       */
+/*   Created: 2024/05/22 17:49:56 by jikaewsi          #+#    #+#             */
+/*   Updated: 2024/08/24 13:10:01 by jikaewsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./libft.h"
+#include "../includes/ft_malloc.h"
 
-void	*ft_memchr(const void *bytes, int character, size_t n)
+void	ft_putstr_fd(const char *string, int fd)
 {
-	size_t		idx;
-	const char	*string;
-
-	idx = 0;
-	string = (const char *) bytes;
-	character = (char) character;
-	while (idx < n)
-	{
-		if (string[idx] == character)
-			return ((void *)(string + idx));
-		idx++;
-	}
-	return (NULL);
+	if (!string || fd < 0)
+		return ;
+	write(fd, string, ft_strlen(string));
 }

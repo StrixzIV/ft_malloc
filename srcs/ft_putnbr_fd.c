@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jikaewsi <jikaewsi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jikaewsi <strixz.self@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 17:18:24 by jikaewsi          #+#    #+#             */
-/*   Updated: 2024/08/25 10:48:57 by jikaewsi         ###   ########.fr       */
+/*   Updated: 2025/11/04 02:12:48 by jikaewsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./libft.h"
+#include "../includes/ft_malloc.h"
 
 void	ft_putnbr_fd(int number, int fd)
 {

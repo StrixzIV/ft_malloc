@@ -6,13 +6,13 @@
 /*   By: jikaewsi <strixz.self@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 10:11:40 by jikaewsi          #+#    #+#             */
-/*   Updated: 2025/09/25 16:30:20 by jikaewsi         ###   ########.fr       */
+/*   Updated: 2025/11/04 02:45:23 by jikaewsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_malloc.h"
 
-t_malloc_tracker tracker = {
+t_malloc_tracker g_tracker = {
     .alloc_lock = PTHREAD_MUTEX_INITIALIZER,
     .tiny_chunk = NULL,
     .small_chunk = NULL,

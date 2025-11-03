@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bzero.c                                         :+:      :+:    :+:   */
+/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jikaewsi <jikaewsi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jikaewsi <strixz.self@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/26 23:48:59 by jikaewsi          #+#    #+#             */
-/*   Updated: 2024/08/24 13:10:01 by jikaewsi         ###   ########.fr       */
+/*   Created: 2024/05/21 15:26:24 by jikaewsi          #+#    #+#             */
+/*   Updated: 2025/11/04 02:12:44 by jikaewsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./libft.h"
+#include "../includes/ft_malloc.h"
 
-void	ft_bzero(void *bytes, size_t n)
+void	ft_putchar_fd(char character, int fd)
 {
-	unsigned char	*ptr;
-
-	ptr = (unsigned char *) bytes;
-	while (n-- > 0)
-		*(ptr++) = 0;
+	write(fd, &character, 1);
 }

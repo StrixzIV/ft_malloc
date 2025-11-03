@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jikaewsi <jikaewsi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jikaewsi <strixz.self@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/21 15:26:24 by jikaewsi          #+#    #+#             */
-/*   Updated: 2024/08/24 13:10:01 by jikaewsi         ###   ########.fr       */
+/*   Created: 2024/05/22 18:06:12 by jikaewsi          #+#    #+#             */
+/*   Updated: 2025/11/04 02:12:58 by jikaewsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./libft.h"
+#include "../includes/ft_malloc.h"
 
-void	ft_putchar_fd(char character, int fd)
+size_t	ft_strlen(const char *string)
 {
-	write(fd, &character, 1);
+	size_t	length;
+
+	length = 0;
+	while (string[length] != '\0')
+		length++;
+	return (length);
 }
