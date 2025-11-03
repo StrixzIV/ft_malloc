@@ -1,49 +1,55 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -g3 -fPIC
 LDFLAGS = -pthread
 
 SOURCE_PATH = srcs/
 INCLUDE_PATH = includes/
 BUILD_PATH = build/
 
-LIBFT_PATH = ./lib/libft
-LIBFT_LIBS = $(LIBFT_PATH)/libft.a
+CFILES = 	align.c \
+			allocate.c \
+			free.c \
+			ft_memcpy.c \
+			ft_putchar_fd.c \
+			ft_putnbr_fd.c \
+			ft_putstr_fd.c \
+			ft_strlen.c \
+			malloc.c \
+			realloc.c \
+			show_alloc_mem.c \
+			tracker.c
 
 ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
-CFILES =	
-			
 NAME = libft_malloc_$(HOSTTYPE).so
 
-SOURCES := $(addprefix $(SOURCE_PATH), $(CFILES))
-OBJS = $(SOURCES:.c=.o)
-OBJS_BUILD = $(addprefix build/, $(OBJS))
+CFLAGS += -I$(INCLUDE_PATH)
+SOURCES = $(addprefix $(SOURCE_PATH), $(CFILES))
+OBJS = $(addprefix $(BUILD_PATH), $(CFILES:.c=.o))
+HEADERS = $(addprefix $(INCLUDE_PATH), ft_malloc.h)
 
-all: $(BUILD_PATH) $(LIBFT_LIBS) $(NAME)
 
-$(BUILD_PATH):
-	@mkdir -p build/
+all: $(NAME)
 
-$(LIBFT_LIBS): 
-	@echo "Making libft..."
-	@make -C $(LIBFT_PATH) bonus -s
+$(NAME): $(OBJS)
+	@echo "Linking library: $(NAME)"
+	@$(CC) $(LDFLAGS) -shared -o $(NAME) $(OBJS) $(LIBFT_LIBS)
+	@echo "Done."
 
-build/%.o: %.c Makefile
-	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS) && printf "Compiling: $(notdir $<)\n"
-	
-$(NAME): $(OBJS_BUILD)
-	$(CC) $(OBJS_BUILD) $(LIBFT_LIBS) $(LDFLAGS) $(HEADERS) -o $(NAME)
+$(BUILD_PATH)%.o: $(SOURCE_PATH)%.c $(HEADERS) Makefile
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) -o $@ -c $<
+	@printf "Compiling: $(notdir $<)\n"
 
 clean:
-	make -C $(LIBFT_PATH) clean
-	rm -f $(OBJS) $(OBJBS)
+	@echo "Cleaning project object files..."
+	@rm -rf $(BUILD_PATH)
 
 fclean: clean
-	make -C $(LIBFT_PATH) fclean
-	rm -rf build
-	rm -f $(NAME)
+	@echo "Removing library: $(NAME)"
+	@rm -f $(NAME)
 
 re: fclean all
 
