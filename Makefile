@@ -16,7 +16,8 @@ CFILES = 	align.c \
 			show_alloc_utils.c \
 			show_alloc_mem.c \
 			show_alloc_mem_ex.c \
-			tracker.c
+			tracker.c \
+			debug.c
 
 ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)

@@ -6,7 +6,7 @@
 /*   By: jikaewsi <strixz.self@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 03:18:25 by jikaewsi          #+#    #+#             */
-/*   Updated: 2025/11/17 01:12:57 by jikaewsi         ###   ########.fr       */
+/*   Updated: 2025/11/17 01:34:32 by jikaewsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_malloc_tracker {
     t_block_metadata    *used_large_chunk;
 }   t_malloc_tracker;
 
+extern t_malloc_config  g_config;
 extern t_malloc_tracker g_tracker;
 
 // Helpers
@@ -85,6 +86,9 @@ void            put_unbr_fd(size_t nb, int fd);
 void            put_hex_fd(size_t nb, int fd);
 void            put_hex_byte(unsigned char byte, int fd);
 void            print_hex_dump(void *addr, size_t size);
+
+void            init_malloc_config(void);
+bool            is_valid_pointer(void *ptr);
 
 __uint64_t      align_value(size_t value, size_t alignment);
 size_t          aligned_header_size(void);

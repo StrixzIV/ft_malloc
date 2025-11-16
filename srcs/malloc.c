@@ -6,13 +6,21 @@
 /*   By: jikaewsi <strixz.self@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 01:58:49 by jikaewsi          #+#    #+#             */
-/*   Updated: 2025/11/04 01:58:49 by jikaewsi         ###   ########.fr       */
+/*   Updated: 2025/11/17 01:37:06 by jikaewsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_malloc.h"
 
 void    *intern_malloc(size_t size) {
+
+    init_malloc_config();
+
+    if (g_config.is_debug) {
+        ft_putstr_fd("[MALLOC] Allocating ", 2);
+        put_unbr_fd(size, 2);
+        ft_putstr_fd(" bytes", 2);
+    }
 
 	// Handle TINY allocations
 	if (size <= TINY_ALLOC_SIZE) {
@@ -91,11 +99,33 @@ void    *intern_malloc(size_t size) {
 void    *malloc(size_t size) {
 
     if (size == 0) {
+
+        if (g_config.is_debug) {
+            ft_putstr_fd("[MALLOC] Request for size 0, returning NULL\n", 2);
+        }
+
         return NULL;
+
     }
 
     pthread_mutex_lock(&g_tracker.alloc_lock);
+    
     void *address = intern_malloc(size);
+
+    if (g_config.is_debug) {
+
+        if (address) {
+            ft_putstr_fd(" -> 0x", 2);
+            put_hex_fd((size_t) address, 2);
+            ft_putstr_fd("\n", 2);
+        }
+        
+        else {
+            ft_putstr_fd(" -> FAILED\n", 2);
+        }
+
+    }
+
     pthread_mutex_unlock(&g_tracker.alloc_lock);
     
     return address;
