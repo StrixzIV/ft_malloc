@@ -4,16 +4,13 @@ LDFLAGS = -pthread
 
 SOURCE_PATH = srcs/
 INCLUDE_PATH = includes/
+
+LIBFT_PATH = libft/
 BUILD_PATH = build/
 
 CFILES = 	align.c \
 			allocate.c \
 			free.c \
-			ft_memcpy.c \
-			ft_putchar_fd.c \
-			ft_putnbr_fd.c \
-			ft_putstr_fd.c \
-			ft_strlen.c \
 			malloc.c \
 			realloc.c \
 			show_alloc_utils.c \
@@ -25,6 +22,9 @@ ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
+LIBFT = $(LIBFT_PATH)libft.a
+LIBFT_FLAGS = -L$(LIBFT_PATH) -lft
+
 NAME = libft_malloc_$(HOSTTYPE).so
 
 CFLAGS += -I$(INCLUDE_PATH)
@@ -34,9 +34,13 @@ HEADERS = $(addprefix $(INCLUDE_PATH), ft_malloc.h)
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
+$(LIBFT):
+	@echo "Building libft..."
+	@make -C $(LIBFT_PATH) bonus --no-print-directory
+
+$(NAME): $(LIBFT) $(OBJS)
 	@echo "Linking library: $(NAME)"
-	@$(CC) $(LDFLAGS) -shared -o $(NAME) $(OBJS) $(LIBFT_LIBS)
+	@$(CC) $(LDFLAGS) -shared -o $(NAME) $(OBJS) $(LIBFT_FLAGS)
 	@echo "Done."
 
 $(BUILD_PATH)%.o: $(SOURCE_PATH)%.c $(HEADERS) Makefile
@@ -47,10 +51,12 @@ $(BUILD_PATH)%.o: $(SOURCE_PATH)%.c $(HEADERS) Makefile
 clean:
 	@echo "Cleaning project object files..."
 	@rm -rf $(BUILD_PATH)
+	@make -C $(LIBFT_PATH) clean --no-print-directory
 
 fclean: clean
 	@echo "Removing library: $(NAME)"
 	@rm -f $(NAME)
+	@make -C $(LIBFT_PATH) fclean --no-print-directory
 
 test: $(NAME)
 	@echo "Compiling test executable..."

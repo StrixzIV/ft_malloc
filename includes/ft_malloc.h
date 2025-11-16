@@ -6,7 +6,7 @@
 /*   By: jikaewsi <strixz.self@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 03:18:25 by jikaewsi          #+#    #+#             */
-/*   Updated: 2025/11/17 00:41:51 by jikaewsi         ###   ########.fr       */
+/*   Updated: 2025/11/17 01:12:57 by jikaewsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@
 # include <pthread.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdbool.h>
 # include <sys/mman.h>
+
+# include "../libft/libft.h"
 
 # define HEXDUMP_SIZE 128
 
@@ -37,6 +40,13 @@
 # else
 #  error "Unsupported operating system"
 # endif
+
+typedef struct s_malloc_config {
+    bool is_initialized;
+    bool is_debug;
+    bool is_check;
+    bool is_scribble;
+}   t_malloc_config;
 
 typedef struct s_block_metadata {
     struct s_block_metadata     *prev;
@@ -62,13 +72,6 @@ typedef struct s_malloc_tracker {
 }   t_malloc_tracker;
 
 extern t_malloc_tracker g_tracker;
-
-// libft
-size_t          ft_strlen(const char *string);
-void            ft_putchar_fd(char character, int fd);
-void            ft_putnbr_fd(int number, int fd);
-void            ft_putstr_fd(const char *string, int fd);
-void            *ft_memcpy(void *destination, const void *source, size_t n);
 
 // Helpers
 
