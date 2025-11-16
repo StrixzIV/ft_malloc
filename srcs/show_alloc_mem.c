@@ -6,7 +6,7 @@
 /*   By: jikaewsi <strixz.self@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 02:25:04 by jikaewsi          #+#    #+#             */
-/*   Updated: 2025/11/04 02:25:04 by jikaewsi         ###   ########.fr       */
+/*   Updated: 2025/11/17 00:02:14 by jikaewsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,28 @@ static void print_block(t_block_metadata * head, size_t * total) {
 		current = current->next;
 	}
 
-	t_block_metadata ** ptr_vector = allocate(NULL, used_block_count * sizeof(t_block_metadata *));
+	t_block_metadata *stack_buffer[256];
+	t_block_metadata **ptr_vector;
+    
+	void *mmap_ptr = NULL;
 
-	if (ptr_vector == NULL)
-		return;
+	if (used_block_count <= 256) {
+		ptr_vector = stack_buffer;
+	}
+    
+    else {
+        
+		size_t needed_size = used_block_count * sizeof(t_block_metadata *);
+		size_t aligned_size = align_value(needed_size, PAGE_SIZE);
+		
+		mmap_ptr = allocate(NULL, aligned_size);
+        
+		if (mmap_ptr == MAP_FAILED)
+			return;
+		
+		ptr_vector = (t_block_metadata **)mmap_ptr;
+        
+	}
 
 	current = head;
 	size_t index = 0;
@@ -100,6 +118,12 @@ static void print_block(t_block_metadata * head, size_t * total) {
 
 	}
 
+	if (mmap_ptr != NULL) {
+		size_t needed_size = used_block_count * sizeof(t_block_metadata *);
+		size_t aligned_size = align_value(needed_size, PAGE_SIZE);
+		munmap(mmap_ptr, aligned_size);
+	}
+
 }
 
 static void print_zone(t_zone_metadata * head, char * name, size_t * total) {
@@ -112,9 +136,25 @@ static void print_zone(t_zone_metadata * head, char * name, size_t * total) {
 		current = current->next;
 	}
 
-	t_zone_metadata ** ptr_vector = allocate(NULL, used_block_count * sizeof(t_zone_metadata *));
-	if (ptr_vector == NULL)
-		return;
+	t_zone_metadata *stack_buffer[256];
+	t_zone_metadata **ptr_vector;
+
+	void *mmap_ptr = NULL;
+
+	if (used_block_count <= 256) {
+		ptr_vector = stack_buffer;
+	}
+    
+    else {
+		size_t needed_size = used_block_count * sizeof(t_zone_metadata *);
+		size_t aligned_size = align_value(needed_size, PAGE_SIZE);
+		
+		mmap_ptr = allocate(NULL, aligned_size);
+		if (mmap_ptr == MAP_FAILED)
+			return;
+		
+		ptr_vector = (t_zone_metadata **)mmap_ptr;
+	}
 
 	current = head;
 	size_t index = 0;
@@ -141,6 +181,12 @@ static void print_zone(t_zone_metadata * head, char * name, size_t * total) {
 
 		print_block(current->used_blocks, total);
 
+	}
+
+	if (mmap_ptr != NULL) {
+		size_t needed_size = used_block_count * sizeof(t_zone_metadata *);
+		size_t aligned_size = align_value(needed_size, PAGE_SIZE);
+		munmap(mmap_ptr, aligned_size);
 	}
 
 }
