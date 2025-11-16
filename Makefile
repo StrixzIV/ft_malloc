@@ -16,7 +16,9 @@ CFILES = 	align.c \
 			ft_strlen.c \
 			malloc.c \
 			realloc.c \
+			show_alloc_utils.c \
 			show_alloc_mem.c \
+			show_alloc_mem_ex.c \
 			tracker.c
 
 ifeq ($(HOSTTYPE),)

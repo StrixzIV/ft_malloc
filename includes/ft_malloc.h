@@ -6,7 +6,7 @@
 /*   By: jikaewsi <strixz.self@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 03:18:25 by jikaewsi          #+#    #+#             */
-/*   Updated: 2025/11/04 02:34:18 by jikaewsi         ###   ########.fr       */
+/*   Updated: 2025/11/17 00:41:51 by jikaewsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/mman.h>
+
+# define HEXDUMP_SIZE 128
 
 # define MIN_ALIGNMENT 16
 # define MIN_FRAGMENTATION_SIZE 64
@@ -75,6 +77,12 @@ void            add_zone(t_zone_metadata **lst_head, t_zone_metadata *header);
 void            remove_block(t_block_metadata **lst_head, t_block_metadata *header);
 void            remove_zone(t_zone_metadata **lst_head, t_zone_metadata *header);
 
+void            sort(void **head, size_t count);
+void            put_unbr_fd(size_t nb, int fd);
+void            put_hex_fd(size_t nb, int fd);
+void            put_hex_byte(unsigned char byte, int fd);
+void            print_hex_dump(void *addr, size_t size);
+
 __uint64_t      align_value(size_t value, size_t alignment);
 size_t          aligned_header_size(void);
 size_t          get_aligned_large_block_size(size_t size);
@@ -95,5 +103,6 @@ void	        *malloc(size_t size);
 void	        *realloc(void *ptr, size_t size);
 
 void	        show_alloc_mem();
+void            show_alloc_mem_ex();
 
 #endif

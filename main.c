@@ -29,6 +29,9 @@ int main()
 	if (small_ptr) strcpy(small_ptr, "Hello Small");
 	if (large_ptr) strcpy(large_ptr, "Hello Large");
 
+    ft_putstr_fd("\n--- EXTENDED VIEW ---\n", 1);
+	show_alloc_mem_ex();
+
 	show_alloc_mem();
 	ft_putstr_fd("\nFreeing small block\n", 1);
 	free(small_ptr);
