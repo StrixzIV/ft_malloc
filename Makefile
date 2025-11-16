@@ -30,7 +30,6 @@ SOURCES = $(addprefix $(SOURCE_PATH), $(CFILES))
 OBJS = $(addprefix $(BUILD_PATH), $(CFILES:.c=.o))
 HEADERS = $(addprefix $(INCLUDE_PATH), ft_malloc.h)
 
-
 all: $(NAME)
 
 $(NAME): $(OBJS)
@@ -51,6 +50,11 @@ fclean: clean
 	@echo "Removing library: $(NAME)"
 	@rm -f $(NAME)
 
+test: $(NAME)
+	@echo "Compiling test executable..."
+	@$(CC) main.c -o main -I$(INCLUDE_PATH) -L. -lft_malloc_$(HOSTTYPE)
+	@LD_PRELOAD=./$(NAME) ./main
+
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re test
