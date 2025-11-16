@@ -6,7 +6,7 @@
 /*   By: jikaewsi <strixz.self@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 16:24:54 by jikaewsi          #+#    #+#             */
-/*   Updated: 2025/11/04 02:33:40 by jikaewsi         ###   ########.fr       */
+/*   Updated: 2025/11/16 23:56:26 by jikaewsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void    *allocate_block(t_zone_metadata *zone, size_t size) {
                     }
                     
                     if (new_free_block->next) {
-                        new_free_block->next->prev = new_free_block;\
+                        new_free_block->next->prev = new_free_block;
                     }
 
                 }
