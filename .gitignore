@@ -1,3 +1,6 @@
 build
 *.o
-libft_malloc_*.so
+libft_malloc*.so
+
+test_*
+!test_*.c
