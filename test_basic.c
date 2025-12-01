@@ -21,7 +21,7 @@ int main()
 	char	*large_ptr;
 	char	*re_ptr;
 
-	printf("\n=== TEST 1: BASIC MALLOC/FREE/REALLOC ===\n\n");
+	ft_putstr_fd("\n=== TEST 1: BASIC MALLOC/FREE/REALLOC ===\n\n", 1);
 
 	// --- Initial State ---
 	ft_putstr_fd("--- Initial State ---\n", 1);
@@ -103,6 +103,6 @@ int main()
 	re_ptr = NULL;
 	show_alloc_mem();
 
-	printf("\n=== TEST 1: PASSED ===\n\n");
+	ft_putstr_fd("\n=== TEST 1: PASSED ===\n\n", 1);
 	return 0;
 }
