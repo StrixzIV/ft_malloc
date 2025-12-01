@@ -64,13 +64,13 @@ void    free(void *ptr) {
         put_hex_fd((size_t) ptr, 2);
     }
 
-    if (g_config.is_check) {
+    pthread_mutex_lock(&g_tracker.alloc_lock);
+    int valid = is_valid_pointer(ptr);
+    pthread_mutex_unlock(&g_tracker.alloc_lock);
 
-        pthread_mutex_lock(&g_tracker.alloc_lock);
-        int valid = is_valid_pointer(ptr);
-        pthread_mutex_unlock(&g_tracker.alloc_lock);
+    if (!valid) {
 
-        if (!valid) {
+        if (g_config.is_check) {
             ft_putstr_fd("\n[FREE ERROR] Invalid pointer: 0x", 2);
             put_hex_fd((size_t)ptr, 2);
             ft_putstr_fd(" - not allocated by malloc!\n", 2);
@@ -80,6 +80,8 @@ void    free(void *ptr) {
         if (g_config.is_debug) {
             ft_putstr_fd(" [Valid]", 2);
         }
+        
+        return;
 
     }
 

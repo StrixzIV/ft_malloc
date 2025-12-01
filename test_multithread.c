@@ -16,7 +16,7 @@
 #include <pthread.h>
 
 #define N_THREADS 8
-#define N_THREADS_STRESS 12 
+#define N_THREADS_STRESS 200
 #define N_ALLOCS_PER_THREAD 1000
 
 typedef struct s_thread_data {
