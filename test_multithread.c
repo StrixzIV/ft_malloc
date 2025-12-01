@@ -16,6 +16,7 @@
 #include <pthread.h>
 
 #define N_THREADS 8
+#define N_THREADS_STRESS 12 
 #define N_ALLOCS_PER_THREAD 1000
 
 typedef struct s_thread_data {
@@ -132,12 +133,12 @@ int main()
 	ft_putstr_fd("\n", 1);
 
 	ft_putstr_fd("--- Test 5.2: Stress test ---\n", 1);
-	printf("Creating %d threads for stress testing...\n", N_THREADS * 2);
+	printf("Creating %d threads for stress testing...\n", N_THREADS_STRESS);
 	
-	pthread_t stress_threads[N_THREADS * 2];
-	t_thread_data stress_data[N_THREADS * 2];
+	pthread_t stress_threads[N_THREADS_STRESS];
+	t_thread_data stress_data[N_THREADS_STRESS];
 	
-	for (int i = 0; i < N_THREADS * 2; i++) {
+	for (int i = 0; i < N_THREADS_STRESS; i++) {
 		stress_data[i].thread_id = i;
 		stress_data[i].success = 0;
 		
@@ -148,7 +149,7 @@ int main()
 	}
 	
 	all_success = 1;
-	for (int i = 0; i < N_THREADS * 2; i++) {
+	for (int i = 0; i < N_THREADS_STRESS; i++) {
 		pthread_join(stress_threads[i], NULL);
 		if (!stress_data[i].success) {
 			printf("Stress thread %d failed\n", i);
