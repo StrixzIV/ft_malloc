@@ -99,3 +99,58 @@ make test5  # Multithreading stress test
 - **Alignment**: All allocations are aligned to 16 bytes.
 - **System Calls**: Uses `mmap` and `munmap` for memory management; `getpagesize` (or `sysconf`) for page alignment.
 
+### Defragmentation Strategy
+
+Defragmentation is achieved through **immediate coalescing** during the `free()` operation. The system maintains the list of free blocks in each zone **sorted by memory address**.
+
+#### Visual Example
+
+```mermaid
+graph TD
+    %% Styles
+    classDef free fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef used fill:#ffebee,stroke:#b71c1c,stroke-width:2px;
+    classDef merge fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px,stroke-dasharray: 5 5;
+
+    subgraph Initial_State ["Initial State"]
+        direction LR
+        A["Block A<br/>Addr: 0x1000<br/>Size: 32<br/>(Free)"]:::free
+        B["Block B<br/>Addr: 0x1020<br/>Size: 32<br/>(Used)"]:::used
+        C["Block C<br/>Addr: 0x1040<br/>Size: 32<br/>(Free)"]:::free
+        
+        A --- B --- C
+    end
+
+    subgraph Action ["Action: free(B)"]
+        B_Free["Block B marked as Free<br/>Inserted into Sorted List"]:::free
+    end
+
+    subgraph Merge_Logic ["Coalescing Process"]
+        direction TB
+        
+        Check_Prev{"Check Previous<br/>Is End(A) == Start(B)?"}
+        Merge_Prev["Backward Merge<br/>New Block A'<br/>Size: 32+32 = 64"]:::merge
+        
+        Check_Next{"Check Next<br/>Is End(A') == Start(C)?"}
+        Merge_Next["Forward Merge<br/>New Block A''<br/>Size: 64+32 = 96"]:::merge
+    end
+
+    subgraph Final_State ["Final State"]
+        Final["Block A''<br/>Addr: 0x1000<br/>Size: 96<br/>(Free)"]:::free
+    end
+
+    Initial_State --> Action
+    Action --> Check_Prev
+    Check_Prev -- Yes (0x1000 + 32 == 0x1020) --> Merge_Prev
+    Merge_Prev --> Check_Next
+    Check_Next -- Yes (0x1000 + 64 == 0x1040) --> Merge_Next
+    Merge_Next --> Final_State
+```
+
+When a block is freed:
+1.  **Insertion**: The block is inserted into the sorted free list.
+2.  **Forward Coalescing**: Checks if the end of the current block touches the start of the next free block. If so, they are merged.
+3.  **Backward Coalescing**: Checks if the end of the previous free block touches the start of the current block. If so, they are merged.
+
+This ensures that small freed chunks are immediately combined into larger chunks, reducing fragmentation and making them available for larger allocations.
+
